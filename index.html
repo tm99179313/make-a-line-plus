@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MakeALine+ | 0から始めるアライナー矯正</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Montserrat:wght@600;800;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif'],
+                        eng: ['"Montserrat"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0B1121',
+                            surface: '#111827',
+                            primary: '#0EA5E9',
+                            cyan: '#06B6D4',
+                            accent: '#8B5CF6',
+                            gold: '#F59E0B',
+                        }
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                        'float-anim': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                            '100%': { transform: 'translateY(0px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body { 
+            background-color: #0B1121; 
+            color: #E5E7EB; 
+            overflow-x: hidden;
+            word-break: auto-phrase;
+            overflow-wrap: anywhere;
+        }
+        
+        .text-balance {
+            text-wrap: balance;
+        }
+
+        .modern-grid {
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .reveal, .hero-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active, .hero-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+        
+        #game-console {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-brand-primary selection:text-white">
+
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 bg-brand-dark z-[100] flex flex-col items-center justify-center transition-opacity duration-1000">
+        <div class="relative w-20 h-20 mb-6">
+            <div class="absolute inset-0 rounded-full border-t-2 border-brand-primary animate-spin"></div>
+            <div class="absolute inset-2 rounded-full border-r-2 border-brand-cyan animate-[spin_1.5s_linear_infinite_reverse]"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-white">
+                <i class="ph-fill ph-brain text-2xl animate-pulse"></i>
+            </div>
+        </div>
+        <div class="text-white font-eng font-bold tracking-[0.3em] text-xs animate-pulse">MakeALine<span class="text-brand-primary">+</span></div>
+    </div>
+
+    <!-- Header -->
+    <header class="fixed w-full top-0 glass-panel border-b-0 border-white/5 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="text-xl font-black text-white tracking-tight font-eng">
+                MakeALine<span class="text-brand-primary">+</span>
+            </div>
+            <nav class="hidden md:flex space-x-8 text-sm font-bold text-gray-400">
+                <a href="#concept" class="hover:text-white transition duration-300 tracking-wider">Concept</a>
+                <a href="#programs" class="hover:text-white transition duration-300 tracking-wider">Programs</a>
+                <a href="#instructor" class="hover:text-white transition duration-300 tracking-wider">Instructor</a>
+                <a href="javascript:void(0)" onclick="forceBootSystem()" class="hover:text-brand-cyan transition duration-300 tracking-wider">Updates <span class="w-2 h-2 rounded-full bg-brand-cyan inline-block animate-ping ml-1"></span></a>
+                <a href="#contact" class="bg-white text-brand-dark px-5 py-2 rounded-full hover:bg-gray-200 hover:scale-105 transition duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)] ml-4">
+                    ENTRY NOW
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden modern-grid">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-primary/20 rounded-full blur-[100px] pointer-events-none"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-brand-accent/20 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div class="max-w-6xl mx-auto px-4 relative z-10 flex flex-col lg:flex-row items-center gap-12">
+            
+            <div class="lg:w-1/2 text-white">
+                <div class="glass-panel inline-flex items-center gap-3 px-4 py-2 rounded-full mb-6 hero-reveal">
+                    <span class="flex h-2.5 w-2.5 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-gold opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-gold"></span>
+                    </span>
+                    <span class="text-xs font-bold text-gray-300 tracking-wider">卒後2年目までは<span class="text-brand-gold mx-1">無料</span>ご招待</span>
+                </div>
+
+                <h1 class="text-4xl lg:text-5xl font-black leading-tight mb-6 tracking-tight hero-reveal delay-100 text-balance">
+                    0から始める、<br class="md:hidden">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-accent">アライナー矯正</span>の第一歩。
+                </h1>
+                
+                <p class="text-base text-gray-400 leading-relaxed mb-10 border-l-2 border-brand-primary/50 pl-4 hero-reveal delay-200">
+                    <span class="inline-block">特定のシステムに依存せず、</span><span class="inline-block">デジタル矯正の「本質」を紐解く。</span><br class="hidden md:block">
+                    <span class="inline-block">次世代を担うドクターのための、</span><span class="inline-block">月例ステップアップコミュニティ。</span>
+                </p>
+                
+                <div class="flex gap-4 hero-reveal delay-300">
+                    <a href="#contact" class="bg-gradient-to-r from-brand-primary to-brand-cyan text-white font-bold px-8 py-3.5 rounded-full shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] hover:-translate-y-1 transition duration-300">
+                        コミュニティに参加する
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 右側：インフォグラフィック -->
+            <div class="lg:w-1/2 w-full relative h-[350px] md:h-[400px] mt-8 lg:mt-0 flex justify-center items-center">
+                
+                <div class="relative w-full max-w-sm cursor-pointer group" onclick="bootSystem()" id="game-console">
+                    
+                    <!-- ★ミニ雅キャラ 1: カセット起動の案内 (位置を右下にずらして被りを解消) -->
+                    <div id="mini-char-1" class="absolute -right-8 md:-right-20 top-8 md:top-12 z-30 animate-float-anim flex flex-col items-center pointer-events-none transition-opacity duration-300">
+                        <div class="bg-white text-brand-dark text-[10px] md:text-xs font-bold px-3 py-2 rounded-2xl rounded-bl-none shadow-lg mb-2 relative">
+                            ここをクリック！
+                            <div class="absolute -bottom-2 left-2 w-0 h-0 border-t-8 border-t-white border-x-8 border-x-transparent"></div>
+                        </div>
+                        <div class="relative w-12 h-12 md:w-16 md:h-16 drop-shadow-xl">
+                            <div class="absolute inset-0 bg-brand-surface border border-brand-cyan rounded-full flex items-center justify-center text-brand-cyan shadow-lg">
+                                <i class="ph-duotone ph-user text-xl"></i>
+                            </div>
+                            <img src="mini-miyabi-pose1.png" alt="ミニ雅キャラ" class="absolute inset-0 w-full h-full object-contain z-10" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+
+                    <div id="cassette" class="absolute left-1/2 -translate-x-1/2 -top-12 md:-top-16 z-20 flex flex-col items-center hero-reveal delay-300 transition-all duration-700 ease-in-out">
+                        <div id="cassette-tooltip" class="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap bg-white text-brand-dark text-[10px] md:text-xs font-bold px-3 py-1.5 rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.5)] pointer-events-none before:content-[''] before:absolute before:top-full before:left-1/2 before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-white">
+                            クリックで最新情報を表示
+                        </div>
+                        <div class="w-20 h-14 md:w-24 md:h-16 rounded-xl glass-panel flex items-center justify-center text-brand-cyan border border-brand-cyan/40 shadow-[0_0_25px_rgba(6,182,212,0.2)] bg-brand-surface animate-bounce-slow group-hover:animate-none group-hover:bg-brand-cyan/20 group-hover:scale-105 transition-all">
+                            <i class="ph-duotone ph-floppy-disk text-3xl"></i>
+                        </div>
+                        <div id="cassette-text" class="mt-2 flex flex-col items-center transition-opacity duration-300">
+                            <p class="text-[10px] md:text-xs font-eng font-bold text-white tracking-widest whitespace-nowrap bg-brand-cyan/80 px-3 py-1 rounded-full animate-pulse group-hover:bg-brand-cyan transition-colors">CHECK UPDATES</p>
+                        </div>
+                        <i id="cassette-arrow" class="ph-bold ph-arrow-down text-brand-cyan mt-1 transition-opacity duration-300 animate-bounce"></i>
+                    </div>
+
+                    <div id="hardware-body" class="relative z-10 w-full aspect-video rounded-3xl bg-gradient-to-b from-brand-primary/20 to-brand-accent/20 p-[1px] shadow-[0_0_40px_rgba(14,165,233,0.2)] hero-reveal delay-200 mt-12 md:mt-16 transition-all duration-500">
+                        <div class="w-full h-full bg-brand-dark rounded-3xl flex flex-col items-center justify-center border border-white/5 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50"></div>
+                            
+                            <div class="w-24 h-1.5 bg-black rounded-full mb-6 shadow-inner relative overflow-hidden">
+                                <div id="console-led" class="absolute top-0 left-0 h-full bg-brand-primary w-1/3 shadow-[0_0_10px_#0EA5E9] transition-all duration-500"></div>
+                            </div>
+                            
+                            <i id="hardware-icon" class="ph-duotone ph-desktop-tower text-brand-primary text-4xl md:text-5xl mb-2 transition-all duration-500"></i>
+                            <p id="hardware-title" class="text-xs md:text-sm font-eng font-bold text-white tracking-widest transition-colors duration-500">HARDWARE</p>
+                            <p id="hardware-sub" class="text-[9px] md:text-[10px] text-gray-400 mt-1 px-4 text-center transition-opacity duration-300">設計思想・バイオメカニクス</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Board Section -->
+    <section id="news-board" class="py-24 bg-brand-dark relative z-20 border-y border-brand-cyan/30 hidden opacity-0 translate-y-10 transition-all duration-1000 shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden">
+        <div class="absolute inset-0 modern-grid opacity-30 pointer-events-none"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-brand-cyan/5 to-transparent pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center justify-center px-3 py-1 bg-brand-cyan/10 border border-brand-cyan/30 rounded-full mb-4">
+                    <span class="w-2 h-2 rounded-full bg-brand-cyan animate-pulse mr-2"></span>
+                    <span class="font-eng text-brand-cyan tracking-[0.2em] text-xs font-bold">SYSTEM ONLINE</span>
+                </div>
+                <h2 class="text-3xl font-black text-white mb-4">活動近況・お知らせ</h2>
+                <p class="text-gray-400 text-sm">公式SNSからの最新情報を自動でお届けします。</p>
+            </div>
+
+            <div class="glass-panel rounded-3xl p-4 md:p-8 border border-brand-cyan/30 flex justify-center relative">
+                <div class="w-full max-w-[500px] bg-white rounded-xl overflow-hidden relative shadow-2xl" style="height: 500px;">
+                    <div class="absolute inset-0 bg-[#F0F2F5] p-4 flex flex-col gap-4 overflow-y-auto">
+                        <div class="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3 border-l-4 border-blue-600">
+                            <div class="w-10 h-10 bg-brand-dark rounded-full flex items-center justify-center text-white font-bold shadow-inner">M+</div>
+                            <div>
+                                <p class="text-sm font-bold text-gray-800">MakeALine+ 公式ページ</p>
+                                <p class="text-xs text-gray-500">2時間前</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-sm text-gray-800 mb-3 leading-relaxed">
+                                【第2期 月例セミナー第1回 開催しました！🎉】<br>
+                                昨夜は多くの先生方にご参加いただき、基礎理論（バイオメカニクス）についての熱い議論が交わされました！<br>
+                                次回は「クリンチェックソフト操作のハンズオン」です。引き続きよろしくお願いします！
+                            </p>
+                            <div class="w-full h-40 bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs border border-gray-300">
+                                <i class="ph-duotone ph-image text-3xl mr-2"></i> セミナー風景の写真
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 bg-brand-dark/90 backdrop-blur-sm flex flex-col items-center justify-center text-white p-6 text-center opacity-0 hover:opacity-100 transition-opacity duration-300 z-10 cursor-help">
+                        <i class="ph-fill ph-code text-5xl text-brand-cyan mb-4"></i>
+                        <p class="font-bold mb-2 text-lg">SNSウィジェット 埋め込みエリア</p>
+                        <p class="text-xs text-gray-300 leading-relaxed">
+                            Web制作時、この領域にFacebook等の埋め込みコード（iframe）を貼り付けるだけで、<br><span class="text-brand-cyan font-bold">HPの更新作業ゼロで常に最新情報が表示</span>されます。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Concept Section -->
+    <section id="concept" class="py-24 bg-brand-surface relative z-10 border-y border-white/5">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="text-center mb-16 reveal">
+                <p class="font-eng text-brand-primary tracking-[0.2em] text-xs mb-3 font-bold">CONCEPT</p>
+                <h2 class="text-3xl font-black text-white mb-6 text-balance">システムに振り回されない、確かな選定眼を</h2>
+                <p class="text-gray-400 leading-relaxed max-w-2xl mx-auto text-sm">
+                    <span class="inline-block">多種多様なアライナーが溢れる今、</span><span class="inline-block">重要なのはブランド名ではなく、</span><span class="inline-block">正しい「ゴールへの道のり」を描けるか。</span><br class="hidden md:block">
+                    <span class="inline-block">未経験の先生が迷わず、最短ルートで</span><span class="inline-block">臨床のスタートラインに立てる環境を提供します。</span>
+                </p>
+            </div>
+
+            <div class="glass-panel p-8 md:p-12 rounded-3xl relative reveal delay-100">
+                <div class="text-center mb-10">
+                    <h3 class="text-lg font-bold text-white mb-2 tracking-widest"><i class="ph-fill ph-game-controller text-brand-gold mr-2 text-xl"></i>アライナー矯正を「ゲーム」に例えると？</h3>
+                    <p class="text-xs text-gray-400">強固な本体（思想）があってこそ、すべてのソフト（メーカー）を自由に遊び尽くせます。</p>
+                </div>
+                
+                <div class="flex flex-col md:flex-row justify-center items-stretch gap-6 relative z-10">
+                    <div class="w-full md:w-1/2 bg-gradient-to-br from-brand-primary/20 to-brand-dark p-[1px] rounded-2xl shadow-[0_0_20px_rgba(14,165,233,0.15)] group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-brand-primary"></div>
+                        <div class="h-full bg-brand-surface/90 p-8 rounded-2xl border border-white/5 flex flex-col items-center text-center">
+                            <div class="w-16 h-16 rounded-full glass-panel border border-brand-primary flex items-center justify-center text-brand-primary mb-4 shadow-[0_0_15px_rgba(14,165,233,0.3)]">
+                                <i class="ph-fill ph-desktop-tower text-3xl"></i>
+                            </div>
+                            <h4 class="text-xl font-bold text-brand-primary mb-2">ハード（本体）</h4>
+                            <p class="text-sm font-bold text-white mb-4">＝ 設計思想（バイオメカニクス）</p>
+                            <p class="text-xs text-gray-400 leading-relaxed text-left inline-block">
+                                揺るぎない土台となる「ドクター自身の思考力」です。PS5などの高性能な本体がなければ名作ゲームが動かないように、根本の理論がなければ矯正は成功しません。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="hidden md:flex items-center justify-center">
+                        <i class="ph-bold ph-plus text-2xl text-gray-600"></i>
+                    </div>
+                    <div class="flex md:hidden justify-center my-[-16px] relative z-20">
+                        <div class="bg-brand-surface rounded-full p-2 border border-white/10"><i class="ph-bold ph-plus text-xl text-gray-500"></i></div>
+                    </div>
+
+                    <div class="w-full md:w-1/2 bg-gradient-to-br from-brand-cyan/20 to-brand-dark p-[1px] rounded-2xl shadow-[0_0_20px_rgba(6,182,212,0.1)] group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-brand-cyan"></div>
+                        <div class="h-full bg-brand-surface/90 p-8 rounded-2xl border border-white/5 flex flex-col items-center text-center">
+                            <div class="w-16 h-16 rounded-full glass-panel border border-brand-cyan flex items-center justify-center text-brand-cyan mb-4">
+                                <i class="ph-fill ph-floppy-disk text-3xl"></i>
+                            </div>
+                            <h4 class="text-xl font-bold text-brand-cyan mb-2">ソフト（カセット）</h4>
+                            <p class="text-sm font-bold text-white mb-4">＝ 各メーカーのシステム</p>
+                            <p class="text-xs text-gray-400 leading-relaxed text-left inline-block">
+                                インビザラインやシュアスマイルなどの各社システムです。ハード（自身の確かな思想）が完成していれば、どんなソフト（メーカー）でも自由自在に使いこなせます。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programs Section -->
+    <section id="programs" class="py-24 bg-brand-dark relative">
+        <div class="absolute inset-0 modern-grid opacity-50 pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10">
+            
+            <div class="text-center mb-16 reveal">
+                <p class="font-eng text-brand-primary tracking-[0.2em] text-xs mb-2 font-bold">PROGRAMS</p>
+                <h2 class="text-3xl font-black text-white mb-2 text-balance">～ MakeALine+ の学びの柱 ～</h2>
+            </div>
+
+            <div class="flex flex-col gap-6">
+                <!-- Program 1 -->
+                <div class="glass-panel p-6 md:p-8 rounded-2xl border border-white/5 flex flex-col md:flex-row items-start md:items-center gap-6 reveal delay-100 hover:border-brand-primary/50 transition">
+                    <div class="w-14 h-14 rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center shrink-0">
+                        <i class="ph-fill ph-calendar-check text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-white">月例セミナー「0からのスタートアップ」</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">学生・研修医を対象に、アライナー矯正の基礎理論から診断、トラブルを未然に防ぐリカバリーまでを毎月体系的に学習。</p>
+                    </div>
+                </div>
+
+                <!-- Program 2 -->
+                <div class="glass-panel p-6 md:p-8 rounded-2xl border border-white/5 flex flex-col md:flex-row items-start md:items-center gap-6 reveal delay-200 hover:border-brand-cyan/50 transition">
+                    <div class="w-14 h-14 rounded-xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center shrink-0">
+                        <i class="ph-fill ph-desktop-tower text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-white">設計ソフト・操作ハンズオン</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">主要ソフトの操作を4時間の集中プログラムで習得。オフセット設定やアタッチメント配置など、臨床に直結する実践的なテクニックを伝授。</p>
+                    </div>
+                </div>
+
+                <!-- Program 3 -->
+                <div class="glass-panel p-6 md:p-8 rounded-2xl border border-white/5 flex flex-col md:flex-row items-start md:items-center gap-6 reveal delay-300 hover:border-brand-accent/50 transition">
+                    <div class="w-14 h-14 rounded-xl bg-brand-accent/10 text-brand-accent flex items-center justify-center shrink-0">
+                        <i class="ph-fill ph-chart-bar text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-white">マルチブランド・アナリティクス</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">各社が採用するシートの硬さや弾性の違い、セットアッププログラムの特性を多角的に比較・検証。</p>
+                    </div>
+                </div>
+
+                <!-- Program 4 -->
+                <div class="glass-panel p-6 md:p-8 rounded-2xl border border-white/5 flex flex-col md:flex-row items-start md:items-center gap-6 reveal delay-100 hover:border-brand-gold/50 transition">
+                    <div class="w-14 h-14 rounded-xl bg-brand-gold/10 text-brand-gold flex items-center justify-center shrink-0">
+                        <i class="ph-fill ph-goggles text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-white">最新デバイスの臨床応用</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">3Dプリンターによる内製化ワークフローの実装や、スマートグラスを活用した次世代のプレゼンテーション術。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diagnostic App Section (★ 4択形式にアップデート) -->
+    <section id="diagnostic" class="py-24 bg-gradient-to-b from-brand-dark to-brand-surface border-y border-white/5 relative z-10 shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden">
+        <div class="absolute inset-0 modern-grid opacity-30 pointer-events-none"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-brand-accent/5 blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto px-4 relative z-10 reveal">
+            <div class="text-center mb-10">
+                <p class="font-eng text-brand-accent tracking-[0.2em] text-xs mb-3 font-bold">MATCHING TEST</p>
+                <h2 class="text-2xl md:text-3xl font-black text-white mb-3 text-balance">最適アライナー 適性診断</h2>
+                <p class="text-sm text-gray-400">直感で答えて、先生の診療スタイルに合うシステムをチェック！</p>
+            </div>
+
+            <div class="relative">
+                
+                <div id="mini-char-2" class="absolute -top-16 right-4 md:-right-4 z-30 animate-float-anim flex flex-col items-center pointer-events-none" style="animation-delay: 0.5s;">
+                    <div class="bg-white text-brand-dark text-[10px] md:text-xs font-bold px-3 py-2 rounded-2xl rounded-br-none shadow-lg mb-2 relative">
+                        直感で答えてね！
+                        <div class="absolute -bottom-2 right-2 w-0 h-0 border-t-8 border-t-white border-x-8 border-x-transparent"></div>
+                    </div>
+                    <div class="relative w-12 h-12 md:w-16 md:h-16 drop-shadow-xl">
+                        <div class="absolute inset-0 bg-brand-surface border border-brand-accent rounded-full flex items-center justify-center text-brand-accent shadow-lg">
+                            <i class="ph-duotone ph-hand-pointing text-xl"></i>
+                        </div>
+                        <img src="mini-miyabi-pose2.png" alt="ミニ雅キャラ" class="absolute inset-0 w-full h-full object-contain z-10" onerror="this.style.display='none'">
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-3xl p-6 md:p-12 border border-brand-accent/30 shadow-[0_0_40px_rgba(139,92,246,0.15)] relative overflow-hidden">
+                    <div id="quiz-progress-bg" class="absolute top-0 left-0 w-full h-1.5 bg-white/5 hidden">
+                        <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-brand-primary to-brand-accent w-0 transition-all duration-300"></div>
+                    </div>
+
+                    <div id="quiz-container" class="min-h-[300px] flex flex-col justify-center relative">
+                        <div id="quiz-intro" class="text-center mt-4">
+                            <div class="w-20 h-20 rounded-full bg-brand-accent/10 flex items-center justify-center mx-auto mb-6 text-brand-accent border border-brand-accent/30">
+                                <i class="ph-duotone ph-stethoscope text-4xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-4 text-balance">全15問であなたに合うアライナーを診断します</h3>
+                            <p class="text-sm text-gray-400 mb-8 max-w-md mx-auto leading-relaxed">
+                                <span class="inline-block">先生のクリニックの現状や治療方針について、</span><span class="inline-block">最も近いものを4つの選択肢からお答えください。</span><span class="inline-block">数あるブランドの中から最適なシステムを提案します。</span>
+                            </p>
+                            <button onclick="startQuiz()" class="bg-gradient-to-r from-brand-accent to-brand-primary hover:from-brand-primary hover:to-brand-accent text-white font-bold py-4 px-10 rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(139,92,246,0.4)] hover:shadow-[0_0_25px_rgba(139,92,246,0.6)] hover:-translate-y-1 group relative z-10 mx-auto flex items-center justify-center w-fit min-w-[200px] mb-6">
+                                簡易診断スタート <i class="ph-bold ph-arrow-right ml-2 inline-block group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                            <a href="https://aligner-diagnosis-public.vercel.app" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 text-sm text-brand-cyan hover:text-white transition-colors underline font-bold relative z-10">
+                                <i class="ph-bold ph-arrow-square-out text-lg"></i> より詳しく診断したい方はこちら（専用サイトへ）
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instructor Section -->
+    <section id="instructor" class="py-24 bg-brand-surface border-y border-white/5">
+        <div class="max-w-4xl mx-auto px-4 reveal">
+            <div class="glass-panel rounded-3xl overflow-hidden flex flex-col md:flex-row">
+                
+                <div class="w-full md:w-2/5 relative h-80 md:h-auto shrink-0 bg-[#0F172A] flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/5">
+                    <i class="ph-duotone ph-user text-6xl text-brand-primary/30 mb-2 absolute"></i>
+                    <p class="text-xs text-gray-500 font-eng tracking-widest absolute mt-20">DR. MASASHI TANAKA</p>
+                    <img src="ChatGPT Image 2026年4月22日 22_00_10.png" 
+                         onerror="this.style.display='none'"
+                         alt="田中 雅 先生" 
+                         class="absolute inset-0 object-cover object-top w-full h-full opacity-90 hover:opacity-100 transition duration-700 z-10">
+                </div>
+
+                <div class="w-full md:w-3/5 p-6 sm:p-8 md:p-10 flex flex-col justify-center">
+                    <p class="font-eng text-brand-primary tracking-widest text-[10px] mb-2">INSTRUCTOR</p>
+                    <h3 class="text-2xl font-black text-white mb-1 text-balance">田中 雅 <span class="block sm:inline text-xs font-eng text-gray-400 sm:ml-2 font-normal mt-1 sm:mt-0">MASASHI TANAKA</span></h3>
+                    <p class="text-xs text-gray-400 mb-6 pb-6 border-b border-white/10">
+                        神保町タワー歯科・矯正歯科 勤務<br>
+                        <span class="text-brand-cyan mt-1 inline-block">MakeALine+（MAL+）講師 / DIOz 補佐</span>
+                    </p>
+                    
+                    <ul class="space-y-4 text-sm text-gray-300 mb-2 md:mb-6">
+                        <li class="flex items-start">
+                            <i class="ph-fill ph-check-circle text-brand-primary mt-0.5 mr-3 text-lg shrink-0"></i>
+                            <span class="leading-relaxed">歯科医療プラットフォーム「WHITE CROSS」にて、100枚超のスライドを用いたセミナーを執筆・登壇。</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="ph-fill ph-check-circle text-brand-primary mt-0.5 mr-3 text-lg shrink-0"></i>
+                            <span class="leading-relaxed">自ら各社のシステムを設計・装着検証したリアルな経験をもとに、客観的な指導を行う。</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 relative bg-brand-dark overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto px-4 relative z-10 reveal">
+            <div class="glass-panel p-10 md:p-16 rounded-[2.5rem] border border-brand-primary/30 relative overflow-hidden text-center shadow-[0_0_50px_rgba(14,165,233,0.05)]">
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-primary/5 to-transparent opacity-100"></div>
+                
+                <div class="relative z-10">
+                    <p class="font-eng text-brand-primary tracking-[0.2em] text-xs mb-4 font-bold">ENTRY</p>
+                    <h2 class="text-3xl md:text-4xl font-black text-white mb-6 text-balance">月例セミナー 参加受付中</h2>
+                    
+                    <p class="text-sm md:text-base text-gray-400 mb-10 leading-relaxed max-w-2xl mx-auto">
+                        <span class="inline-block">MakeALine+ では、Facebookや公式ラインを活用した</span><span class="inline-block">シームレスなオンライン連携を行っています。</span><br class="hidden md:block">
+                        <span class="inline-block">日々の臨床の疑問を即座に共有・解決できる</span><span class="inline-block">実践的なコミュニティに、あなたも参加しませんか？</span>
+                    </p>
+
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-6 mb-20">
+                        <div class="text-left bg-brand-dark/50 px-6 py-4 rounded-xl border border-white/5 relative z-10">
+                            <p class="text-xs text-gray-500 mb-1">お問い合わせ先</p>
+                            <p class="text-sm text-gray-300">セミナー講師 田中 / 担当 石田</p>
+                            <p class="text-lg md:text-xl font-bold text-white font-eng mt-1">jtdc@jimbocho-tower-dc.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative inline-block">
+                        <div class="absolute -top-16 -left-6 md:-left-12 z-30 animate-float-anim flex flex-col items-center pointer-events-none" style="animation-delay: 1s;">
+                            <div class="bg-white text-brand-dark text-[10px] md:text-xs font-bold px-3 py-2 rounded-2xl rounded-bl-none shadow-lg mb-2 relative">
+                                一緒に学ぼう！
+                                <div class="absolute -bottom-2 left-2 w-0 h-0 border-t-8 border-t-white border-x-8 border-x-transparent"></div>
+                            </div>
+                            <div class="relative w-12 h-12 md:w-16 md:h-16 drop-shadow-xl">
+                                <div class="absolute inset-0 bg-brand-surface border border-brand-primary rounded-full flex items-center justify-center text-brand-primary shadow-lg">
+                                    <i class="ph-duotone ph-hand-waving text-xl"></i>
+                                </div>
+                                <img src="mini-miyabi-pose3.png" alt="ミニ雅キャラ" class="absolute inset-0 w-full h-full object-contain z-10" onerror="this.style.display='none'">
+                            </div>
+                        </div>
+
+                        <a href="#" class="inline-block bg-white text-brand-dark font-bold px-12 py-5 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 transition duration-300 relative z-10">
+                            コミュニティに参加する
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#050810] py-8 text-center text-xs text-gray-600 font-eng tracking-widest border-t border-white/5">
+        <p>&copy; 2026 MakeALine+. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        function bootSystem() {
+            const cassette = document.getElementById('cassette');
+            const cassetteText = document.getElementById('cassette-text');
+            const cassetteArrow = document.getElementById('cassette-arrow');
+            const cassetteTooltip = document.getElementById('cassette-tooltip');
+            const miniChar1 = document.getElementById('mini-char-1');
+            const led = document.getElementById('console-led');
+            const hardwareBody = document.getElementById('hardware-body');
+            const hardwareIcon = document.getElementById('hardware-icon');
+            const hardwareTitle = document.getElementById('hardware-title');
+            const hardwareSub = document.getElementById('hardware-sub');
+            const newsBoard = document.getElementById('news-board');
+
+            if(cassette.classList.contains('inserted')) {
+                newsBoard.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            cassette.classList.add('inserted');
+
+            cassetteText.style.opacity = '0';
+            cassetteArrow.style.opacity = '0';
+            if(cassetteTooltip) cassetteTooltip.style.opacity = '0';
+            if(miniChar1) miniChar1.style.opacity = '0'; 
+
+            cassette.style.transform = 'translate(-50%, 60px) scale(0.8)';
+            cassette.style.opacity = '0'; 
+
+            setTimeout(() => {
+                led.style.width = '100%';
+                led.style.backgroundColor = '#06B6D4';
+                led.style.boxShadow = '0 0 20px #06B6D4, 0 0 40px #06B6D4';
+                
+                hardwareBody.style.boxShadow = '0 0 60px rgba(6, 182, 212, 0.4)';
+                hardwareIcon.classList.remove('text-brand-primary');
+                hardwareIcon.classList.add('scale-125', 'text-brand-cyan');
+                
+                hardwareTitle.innerText = "SYSTEM ONLINE";
+                hardwareTitle.classList.remove('text-white');
+                hardwareTitle.classList.add('text-brand-cyan');
+                
+                hardwareSub.style.opacity = '0';
+
+                newsBoard.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    newsBoard.classList.remove('opacity-0', 'translate-y-10');
+                    newsBoard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+
+            }, 700); 
+        }
+
+        function forceBootSystem() {
+            const newsBoard = document.getElementById('news-board');
+            if(newsBoard.classList.contains('hidden')) {
+                bootSystem();
+            } else {
+                newsBoard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // ==========================================
+        // ★ 4択形式の質問データ（※ここに実際のアプリのテキストを上書きしてください）
+        // ==========================================
+        const quizQuestions = [
+            {
+                text: "Q1. アライナー矯正で最も対応したい（対応している）症例の難易度は？",
+                options: [
+                    { text: "抜歯を伴う全顎的な難症例までフルカバーしたい", type: "A" },
+                    { text: "非抜歯での中等度の叢生や空隙の改善が多い", type: "B" },
+                    { text: "前歯部のみの部分的な矯正（プチ矯正）がメイン", type: "C" },
+                    { text: "後戻りのリカバリーなど、ごく軽微な修正が中心", type: "D" }
+                ]
+            },
+            {
+                text: "Q2. 3Dシミュレーションソフト（治療計画）の操作について",
+                options: [
+                    { text: "AIにある程度お任せして、手間なく進めたい", type: "A" },
+                    { text: "歯根の向きやアタッチメントまで自分で緻密に設計したい", type: "B" },
+                    { text: "AIの提案を確認しつつ、要所だけ自分で修正したい", type: "C" },
+                    { text: "操作がシンプルで分かりやすいものが一番良い", type: "D" }
+                ]
+            },
+            {
+                text: "Q3. 患者さんへ提案する際の「ブランド力（知名度）」の重要性は？",
+                options: [
+                    { text: "非常に重要。名前が売れている方が患者さんも安心する", type: "A" },
+                    { text: "ある程度あれば良い。最後はドクターの腕次第", type: "B" },
+                    { text: "知名度よりも、治療費の安さ（コスパ）を求められる", type: "C" },
+                    { text: "全く気にしない。結果が出ればどのブランドでも良い", type: "D" }
+                ]
+            },
+            {
+                text: "Q4. クリニックへのシステム導入費用や、年間のノルマについて",
+                options: [
+                    { text: "初期費用がかかっても、最高峰のシステムを入れたい", type: "A" },
+                    { text: "導入費用は抑えつつ、ある程度の機能は欲しい", type: "B" },
+                    { text: "とにかく初期費用ゼロ、ノルマなしで手軽に始めたい", type: "C" },
+                    { text: "症例ごとの都度払いで、リスクなく運用したい", type: "D" }
+                ]
+            },
+            {
+                text: "Q5. アライナーのシート素材や「納期」に対する考え方は？",
+                options: [
+                    { text: "納期が遅くても、世界中から集まったAIデータを優先", type: "A" },
+                    { text: "痛みが少なく、持続的に力がかかる最新素材を使いたい", type: "B" },
+                    { text: "とにかく早く届く（国内生産など）スピードを重視", type: "C" },
+                    { text: "特にこだわりはない。標準的なもので十分", type: "D" }
+                ]
+            },
+            {
+                text: "Q6. 治療途中の追加アライナー（リファイメント）の費用について",
+                options: [
+                    { text: "費用を気にせず、何度でも追加できるプランが良い", type: "A" },
+                    { text: "回数制限があっても、基本料金が安い方が良い", type: "B" },
+                    { text: "追加ごとに費用がかかっても、トータルで安く済ませたい", type: "C" },
+                    { text: "そもそも追加が出ないよう、最初の設計で完璧にしたい", type: "D" }
+                ]
+            },
+            {
+                text: "Q7. 他のデジタル機器（IOSやCTなど）との連携について",
+                options: [
+                    { text: "メーカー独自の専用スキャナーで統一して使いたい", type: "A" },
+                    { text: "他社のCTやスキャナーのデータを自由に組み合わせて診断したい", type: "B" },
+                    { text: "シリコン印象（型取り）でも受け付けてくれる柔軟性が欲しい", type: "C" },
+                    { text: "まだIOSを持っていないので、まずは手軽なものから", type: "D" }
+                ]
+            },
+            {
+                text: "Q8. 顎間ゴム（エラスティック）などの補助装置の併用について",
+                options: [
+                    { text: "積極的に併用し、複雑な力学（メカニクス）を駆使したい", type: "A" },
+                    { text: "必要な時だけ使うが、基本はアライナー単体で治したい", type: "B" },
+                    { text: "なるべく補助装置は使わず、シンプルに治療したい", type: "C" },
+                    { text: "部分矯正メインなので、顎間ゴムはほとんど使わない", type: "D" }
+                ]
+            },
+            {
+                text: "Q9. アライナー矯正を導入する一番の目的は？",
+                options: [
+                    { text: "自費診療の大きな柱として、クリニックの収益を底上げしたい", type: "A" },
+                    { text: "ワイヤー矯正と同等の高度な治療をデジタルで実現したい", type: "B" },
+                    { text: "一般歯科の片手間で、利益率の高いメニューを追加したい", type: "C" },
+                    { text: "補綴治療前の事前矯正など、他の治療のオプションとして使いたい", type: "D" }
+                ]
+            },
+            {
+                text: "Q10. メーカーのサポート体制（治療計画の相談など）について",
+                options: [
+                    { text: "メーカーの専門医に直接相談できる手厚いサポートが欲しい", type: "A" },
+                    { text: "基本は自分で考えるが、困った時だけ相談できる窓口が欲しい", type: "B" },
+                    { text: "サポートは薄くてもいいので、その分システム利用料を安くしてほしい", type: "C" },
+                    { text: "外部のサポートではなく、MAL+のような勉強会で解決したい", type: "D" }
+                ]
+            },
+            {
+                text: "Q11. スタッフ（歯科衛生士や助手）の教育や関わり方について",
+                options: [
+                    { text: "スキャンから指導まで、スタッフ主導で回せるシステムにしたい", type: "A" },
+                    { text: "診断や設計などの重要な部分は、すべてドクターが管理したい", type: "B" },
+                    { text: "スタッフへの教育コストはあまりかけたくない", type: "C" },
+                    { text: "少人数のクリニックなので、ドクター一人で完結させたい", type: "D" }
+                ]
+            },
+            {
+                text: "Q12. アライナー矯正に関する現在の「自信」は？",
+                options: [
+                    { text: "すでに複数の症例をこなし、ある程度の自信がある", type: "A" },
+                    { text: "理論は理解しているが、設計ソフトの操作に不安がある", type: "B" },
+                    { text: "これから始める段階で、何から手をつけていいか分からない", type: "C" },
+                    { text: "過去に失敗した経験があり、今は少し苦手意識がある", type: "D" }
+                ]
+            },
+            {
+                text: "Q13. 学会やセミナーへの参加スタイルは？",
+                options: [
+                    { text: "有名な大規模学会や、メーカー主催の公式セミナーによく行く", type: "A" },
+                    { text: "特定の講師による、実践的でコアなハンズオンセミナーが好き", type: "B" },
+                    { text: "オンラインのウェビナーなどで、時間がある時に手軽に学びたい", type: "C" },
+                    { text: "あまり参加しない。本や独学で学ぶことが多い", type: "D" }
+                ]
+            },
+            {
+                text: "Q14. 症例検討（クリンチェックなど）にかける時間は？",
+                options: [
+                    { text: "AIの提案をパッと確認して、5〜10分程度で承認する", type: "A" },
+                    { text: "じっくりと時間をかけ、30分以上かけてミリ単位で修正する", type: "B" },
+                    { text: "15〜20分程度で、要点だけを効率よく修正する", type: "C" },
+                    { text: "ほとんど確認せず、メーカーを信じてそのまま承認してしまう", type: "D" }
+                ]
+            },
+            {
+                text: "Q15. 将来的な「アライナー矯正」のビジョンは？",
+                options: [
+                    { text: "トップレベルのインビザラインドクターとして名前を売りたい", type: "A" },
+                    { text: "ブランドに依存せず、あらゆるシステムを使いこなす職人になりたい", type: "B" },
+                    { text: "地域の患者さんに、安価で手軽な矯正治療を広く提供したい", type: "C" },
+                    { text: "あくまで一般歯科の1メニューとして、無理のない範囲で続けたい", type: "D" }
+                ]
+            }
+        ];
+        
+        let currentQuestion = 0;
+        // 4タイプのスコアを管理
+        let scores = { A: 0, B: 0, C: 0, D: 0 };
+
+        function startQuiz() {
+            currentQuestion = 0;
+            scores = { A: 0, B: 0, C: 0, D: 0 };
+            const progressBg = document.getElementById('quiz-progress-bg');
+            const miniChar2 = document.getElementById('mini-char-2');
+            
+            if(progressBg) progressBg.classList.remove('hidden');
+            if(miniChar2) miniChar2.style.opacity = '0'; 
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const container = document.getElementById('quiz-container');
+            const progressBar = document.getElementById('quiz-progress-bar');
+            
+            const progressPercentage = (currentQuestion / quizQuestions.length) * 100;
+            if(progressBar) progressBar.style.width = `${progressPercentage}%`;
+
+            if (currentQuestion < quizQuestions.length) {
+                const q = quizQuestions[currentQuestion];
+                
+                // 4つの選択肢のHTMLを生成
+                let optionsHtml = '';
+                q.options.forEach((opt, index) => {
+                    // 番号をA, B, C, Dに変換
+                    const letters = ['A', 'B', 'C', 'D'];
+                    optionsHtml += `
+                        <button onclick="answerQuestion('${opt.type}')" class="w-full bg-brand-dark/80 hover:bg-brand-primary/20 border border-white/10 hover:border-brand-primary text-white font-bold py-4 px-6 rounded-2xl transition duration-300 text-left flex items-center group shadow-[0_0_15px_rgba(0,0,0,0.2)]">
+                            <span class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mr-4 group-hover:bg-brand-primary group-hover:text-white transition-colors shrink-0 text-sm">${letters[index]}</span>
+                            <span class="text-sm md:text-base leading-relaxed">${opt.text}</span>
+                        </button>
+                    `;
+                });
+
+                container.innerHTML = `
+                    <div class="animate-[fadeIn_0.4s_ease-out] w-full max-w-3xl mx-auto">
+                        <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                            <p class="text-brand-accent font-eng font-bold text-xs tracking-widest flex items-center">
+                                <i class="ph-duotone ph-stethoscope mr-2 text-lg"></i> QUESTION
+                            </p>
+                            <p class="text-gray-400 font-eng text-sm font-bold bg-white/5 px-3 py-1 rounded-full border border-white/10">
+                                <span class="text-white">${currentQuestion + 1}</span> / ${quizQuestions.length}
+                            </p>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-bold text-white mb-8 leading-relaxed text-center text-balance">${q.text}</h3>
+                        
+                        <div class="flex flex-col gap-3">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                `;
+            } else {
+                if(progressBar) progressBar.style.width = '100%';
+                setTimeout(showResult, 300);
+            }
+        }
+
+        // 引数に選んだType(A〜D)を受け取り、スコアを加算
+        function answerQuestion(selectedType) {
+            scores[selectedType]++;
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function showResult() {
+            const progressBg = document.getElementById('quiz-progress-bg');
+            if(progressBg) progressBg.classList.add('hidden');
+            
+            const container = document.getElementById('quiz-container');
+            
+            // 最もスコアが高いTypeを判定
+            let maxType = 'A';
+            let maxScore = scores['A'];
+            for (const type in scores) {
+                if (scores[type] > maxScore) {
+                    maxScore = scores[type];
+                    maxType = type;
+                }
+            }
+
+            // 結果の詳細テキスト
+            let resultTitle = "";
+            let resultText = "";
+            let colorClass = "";
+
+            if (maxType === 'A') {
+                resultTitle = "【包括的システム】<br>インビザライン 等がおすすめ";
+                resultText = "難症例にも対応でき、世界最大のデータとブランド力を持つシステムが先生のスタイルに合っています。MAL+では、AIの提案を鵜呑みにせず、自ら緻密に修正する「ハード（思想）」の作り方を指導します。";
+                colorClass = "text-brand-gold";
+            } else if (maxType === 'B') {
+                resultTitle = "【カスタマイズシステム】<br>シュアスマイル 等がおすすめ";
+                resultText = "CTデータ等との高度な連携や、ドクター主導の緻密なセットアップを好む先生に合っています。MAL+では、各社のソフトウェアの特性を活かし、意図通りに歯を動かすためのハンズオンを提供しています。";
+                colorClass = "text-brand-cyan";
+            } else if (maxType === 'C') {
+                resultTitle = "【コスパ・バランス型】<br>クリアコレクト 等がおすすめ";
+                resultText = "導入のハードルが低く、シンプルで費用対効果の高いシステムが合っています。MAL+では、リーズナブルなシステムでも難症例をリカバリーできる「バイオメカニクスの本質」を1から学ぶことができます。";
+                colorClass = "text-brand-primary";
+            } else {
+                resultTitle = "【シンプル・部分矯正】<br>国内系アライナー 等がおすすめ";
+                resultText = "まずは前歯部の簡単な症例から、低リスク・低コストで始めたい先生に合っています。MAL+の月例セミナーで、適応症例の見極め方や、トラブルを未然に防ぐ基礎知識を身につけ、徐々にステップアップしましょう！";
+                colorClass = "text-green-400";
+            }
+
+            container.innerHTML = `
+                <div class="text-center animate-[fadeIn_0.5s_ease-out]">
+                    <div class="flex justify-center items-end gap-6 mb-8">
+                        <div class="text-right hidden md:block">
+                            <p class="font-eng text-gray-500 text-[10px] tracking-widest mb-1">YOUR TYPE</p>
+                            <p class="text-4xl font-black text-white font-eng">${maxType}</p>
+                        </div>
+                        <div class="w-px h-16 bg-white/10 hidden md:block"></div>
+                        <div class="text-left text-center md:text-left">
+                            <p class="font-eng text-gray-500 text-[10px] tracking-widest mb-1">MATCHING RESULT</p>
+                            <p class="text-3xl md:text-4xl font-black ${colorClass} font-eng drop-shadow-lg leading-tight">${resultTitle}</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-sm text-gray-300 mb-10 max-w-lg mx-auto leading-relaxed bg-black/20 p-6 rounded-2xl border border-white/5 text-left">${resultText}</p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+                        <a href="#contact" class="bg-gradient-to-r from-brand-primary to-brand-accent text-white font-bold py-4 px-10 rounded-full hover:shadow-[0_0_25px_rgba(139,92,246,0.5)] hover:-translate-y-1 transition duration-300 w-full sm:w-auto">
+                            コミュニティで学び始める
+                        </a>
+                        <a href="https://aligner-diagnosis-public.vercel.app" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-brand-cyan hover:text-white transition underline w-full sm:w-auto flex items-center justify-center gap-1">
+                            <i class="ph-bold ph-arrow-square-out text-lg"></i> より詳しい専用診断サイトへ
+                        </a>
+                    </div>
+                    <button onclick="startQuiz()" class="text-xs text-gray-500 hover:text-white transition underline">もう一度簡易診断する</button>
+                </div>
+            `;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function() {
+                const preloader = document.getElementById('preloader');
+                preloader.style.opacity = '0';
+                setTimeout(() => { preloader.style.display = 'none'; }, 1000);
+            }, 1500);
+
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            setTimeout(() => { document.querySelectorAll('.hero-reveal').forEach(el => el.classList.add('active')); }, 100);
+        });
+    </script>
+</body>
+</html>
