@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MakeALine+ | 0から始めるアライナー矯正</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-    <link href="[https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Montserrat:wght@600;800;900&display=swap](https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Montserrat:wght@600;800;900&display=swap)" rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Montserrat:wght@600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -47,8 +45,7 @@
             }
         }
     </script>
-    <!-- Phosphor Icons -->
-    <script src="[https://unpkg.com/@phosphor-icons/web](https://unpkg.com/@phosphor-icons/web)"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         body { 
             background-color: #0B1121; 
@@ -98,7 +95,6 @@
 </head>
 <body class="font-sans antialiased selection:bg-brand-primary selection:text-white">
 
-    <!-- Preloader -->
     <div id="preloader" class="fixed inset-0 bg-brand-dark z-[100] flex flex-col items-center justify-center transition-opacity duration-1000">
         <div class="relative w-20 h-20 mb-6">
             <div class="absolute inset-0 rounded-full border-t-2 border-brand-primary animate-spin"></div>
@@ -110,14 +106,13 @@
         <div class="text-white font-eng font-bold tracking-[0.3em] text-xs animate-pulse">MakeALine<span class="text-brand-primary">+</span></div>
     </div>
 
-    <!-- Header -->
     <header class="fixed w-full top-0 glass-panel border-b-0 border-white/5 z-50">
         <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="text-xl font-black text-white tracking-tight font-eng">
                 MakeALine<span class="text-brand-primary">+</span>
             </div>
             
-            <a href="[https://mal-portal-cyan.vercel.app](https://mal-portal-cyan.vercel.app)" target="_blank" rel="noopener noreferrer" class="md:hidden text-brand-cyan hover:text-white flex items-center justify-center w-10 h-10 rounded-full bg-brand-cyan/10 border border-brand-cyan/30">
+            <a href="https://mal-portal-cyan.vercel.app" target="_blank" rel="noopener noreferrer" class="md:hidden text-brand-cyan hover:text-white flex items-center justify-center w-10 h-10 rounded-full bg-brand-cyan/10 border border-brand-cyan/30">
                 <i class="ph-bold ph-sign-in text-xl"></i>
             </a>
 
@@ -128,11 +123,11 @@
                 <a href="javascript:void(0)" onclick="forceBootSystem()" class="hover:text-brand-cyan transition duration-300 tracking-wider">Updates <span class="w-2 h-2 rounded-full bg-brand-cyan inline-block animate-ping ml-1"></span></a>
                 
                 <div class="flex items-center gap-4 ml-4 pl-4 border-l border-white/10">
-                    <a href="[https://mal-portal-cyan.vercel.app](https://mal-portal-cyan.vercel.app)" target="_blank" rel="noopener noreferrer" class="text-brand-cyan hover:text-white transition duration-300 tracking-wider flex items-center gap-1.5 border border-brand-cyan/30 px-4 py-1.5 rounded-full hover:bg-brand-cyan/10 text-xs">
+                    <a href="https://mal-portal-cyan.vercel.app" target="_blank" rel="noopener noreferrer" class="text-brand-cyan hover:text-white transition duration-300 tracking-wider flex items-center gap-1.5 border border-brand-cyan/30 px-4 py-1.5 rounded-full hover:bg-brand-cyan/10 text-xs">
                         <i class="ph-bold ph-sign-in"></i> MEMBER LOGIN
                     </a>
                     
-                    <a href="[https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform](https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform)" target="_blank" rel="noopener noreferrer" class="bg-white text-brand-dark px-5 py-2 rounded-full hover:bg-gray-200 hover:scale-105 transition duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                    <a href="https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform" target="_blank" rel="noopener noreferrer" class="bg-white text-brand-dark px-5 py-2 rounded-full hover:bg-gray-200 hover:scale-105 transition duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                         ENTRY NOW
                     </a>
                 </div>
@@ -140,7 +135,6 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden modern-grid">
         <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-primary/20 rounded-full blur-[100px] pointer-events-none"></div>
         <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-brand-accent/20 rounded-full blur-[100px] pointer-events-none"></div>
@@ -167,13 +161,12 @@
                 </p>
                 
                 <div class="flex gap-4 hero-reveal delay-300">
-                    <a href="[https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform](https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform)" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-brand-primary to-brand-cyan text-white font-bold px-8 py-3.5 rounded-full shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] hover:-translate-y-1 transition duration-300">
+                    <a href="https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-brand-primary to-brand-cyan text-white font-bold px-8 py-3.5 rounded-full shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] hover:-translate-y-1 transition duration-300">
                         コミュニティに参加する
                     </a>
                 </div>
             </div>
             
-            <!-- 右側：インフォグラフィック -->
             <div class="lg:w-1/2 w-full relative h-[350px] md:h-[400px] mt-8 lg:mt-0 flex justify-center items-center">
                 
                 <div class="relative w-full max-w-sm cursor-pointer group" onclick="bootSystem()" id="game-console">
@@ -222,7 +215,6 @@
         </div>
     </section>
 
-    <!-- News Board Section -->
     <section id="news-board" class="py-24 bg-brand-dark relative z-20 border-y border-brand-cyan/30 hidden opacity-0 translate-y-10 transition-all duration-1000 shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden">
         <div class="absolute inset-0 modern-grid opacity-30 pointer-events-none"></div>
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-brand-cyan/5 to-transparent pointer-events-none"></div>
@@ -239,7 +231,6 @@
 
             <div class="w-full max-w-2xl mx-auto flex flex-col gap-6">
                 
-                <!-- 記事1 (最新・画像あり・クリック不可) -->
                 <div class="glass-panel p-6 md:p-8 rounded-2xl border border-brand-cyan/30 shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden group">
                     <div class="absolute top-0 left-0 w-1 h-full bg-brand-cyan"></div>
                     <div class="flex items-center justify-between mb-4">
@@ -248,7 +239,6 @@
                     </div>
                     <h3 class="text-xl md:text-2xl font-bold text-white mb-4 leading-tight text-balance">メンバー専用ポータルサイト（Zoom・アーカイブ動画）を開設しました！</h3>
                     
-                    <!-- ★修正: ファイル名をimage_portal.pngに変更しました -->
                     <div class="w-full h-64 md:h-80 relative overflow-hidden rounded-xl mb-6 bg-[#f8f9fa] border border-white/10 flex items-center justify-center p-2 shadow-inner">
                         <img src="image_portal.png" alt="ポータルサイト開設" class="object-contain w-full h-full group-hover:scale-105 transition duration-700 drop-shadow-md" onerror="this.style.display='none'">
                     </div>
@@ -260,14 +250,12 @@
 
                     <div class="bg-[#00B900]/10 border border-[#00B900]/30 rounded-xl p-4 text-center relative overflow-hidden">
                         <p class="text-xs font-bold text-white mb-3 relative z-10">新規参加の案内や資料配布は公式LINEで行っています！</p>
-                        <a href="[https://line.me/R/ti/p/@055htfzy](https://line.me/R/ti/p/@055htfzy)" target="_blank" rel="noopener noreferrer" class="relative z-10 inline-flex bg-[#00B900] hover:bg-[#009900] text-white font-bold py-2.5 px-6 rounded-full transition duration-300 shadow-[0_0_15px_rgba(0,185,0,0.3)] hover:-translate-y-0.5 items-center justify-center gap-2 mx-auto text-sm">
+                        <a href="https://line.me/R/ti/p/@055htfzy" target="_blank" rel="noopener noreferrer" class="relative z-10 inline-flex bg-[#00B900] hover:bg-[#009900] text-white font-bold py-2.5 px-6 rounded-full transition duration-300 shadow-[0_0_15px_rgba(0,185,0,0.3)] hover:-translate-y-0.5 items-center justify-center gap-2 mx-auto text-sm">
                             <i class="ph-bold ph-chats text-lg"></i> LINEで友だち追加する
                         </a>
                     </div>
                 </div>
 
-                <!-- 記事2 (過去・見た目はテキストのみ・クリックでモーダル表示) -->
-                <!-- ★修正: onclick内のファイル名を、GitHub上に存在する image_aa1176.png に修正しました -->
                 <div class="glass-panel p-6 rounded-2xl border border-white/10 hover:border-brand-cyan/50 hover:bg-brand-cyan/5 cursor-pointer transition-all relative overflow-hidden group" onclick="openModal('image_aa1176.png', 'サイト開設＆インビザライン体験会開催！', '2026.04.26', 'MAL+とDIOzのコラボによるクリンチェックセミナーが絶賛開催中です！<br>自分の考えをCC（クリンチェック）上に正確に再現するためのノウハウを、熱気あふれる会場で共有しました。次回のハンズオンもお楽しみに！')">
                     <span class="bg-white/5 text-gray-400 text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block border border-white/10 group-hover:bg-brand-cyan/20 group-hover:text-brand-cyan group-hover:border-brand-cyan/30 transition-colors">2026.04.26</span>
                     <h3 class="text-lg font-bold text-white mb-2 group-hover:text-brand-cyan transition-colors">サイト開設＆インビザライン体験会開催！</h3>
@@ -279,7 +267,6 @@
                     </div>
                 </div>
 
-                <!-- 記事3 (過去・見た目はテキストのみ・画像がない場合は画像エリアを隠して表示) -->
                 <div class="glass-panel p-6 rounded-2xl border border-white/10 hover:border-brand-cyan/50 hover:bg-brand-cyan/5 cursor-pointer transition-all relative overflow-hidden group" onclick="openModal('', 'MakeALine+ プロジェクト始動！', '2025.04.22', '次世代を担うドクターのためのアライナー矯正コミュニティ「MakeALine+」の構想がスタート。<br>システムに振り回されない確かな選定眼を育むためのカリキュラムを鋭意制作中です。今後のアップデートにご期待ください。')">
                     <span class="bg-white/5 text-gray-400 text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block border border-white/10 group-hover:bg-brand-cyan/20 group-hover:text-brand-cyan group-hover:border-brand-cyan/30 transition-colors">2025.04.22</span>
                     <h3 class="text-lg font-bold text-white mb-2 group-hover:text-brand-cyan transition-colors">MakeALine+ プロジェクト始動！</h3>
@@ -295,7 +282,6 @@
         </div>
     </section>
 
-    <!-- Concept Section -->
     <section id="concept" class="py-24 bg-brand-surface relative z-10 border-y border-white/5">
         <div class="max-w-5xl mx-auto px-4">
             <div class="text-center mb-16 reveal">
@@ -353,7 +339,6 @@
         </div>
     </section>
 
-    <!-- Programs Section -->
     <section id="programs" class="py-24 bg-brand-dark relative">
         <div class="absolute inset-0 modern-grid opacity-50 pointer-events-none"></div>
         <div class="max-w-4xl mx-auto px-4 relative z-10">
@@ -407,7 +392,6 @@
         </div>
     </section>
 
-    <!-- Diagnostic App Section -->
     <section id="diagnostic" class="pt-32 pb-24 bg-gradient-to-b from-brand-dark to-brand-surface border-y border-white/5 relative z-10 shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden">
         <div class="absolute inset-0 modern-grid opacity-30 pointer-events-none"></div>
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-brand-accent/5 blur-[100px] pointer-events-none"></div>
@@ -422,7 +406,7 @@
             <div class="relative">
                 
                 <div id="mini-char-2" class="absolute -top-16 right-4 md:-right-4 z-30 animate-float-anim flex flex-col items-center pointer-events-none" style="animation-delay: 0.5s;">
-                    <div class="bg-white text-brand-dark text-[10px] md:text-xs font-bold px-3 py-2 rounded-2xl rounded-br-none shadow-lg mb-2 relative">
+                    <div class="bg-white text-brand-dark text-[10px] md:text-xs font-bold px-3 py-2 rounded-2xl rounded-bl-none shadow-lg mb-2 relative">
                         直感で答えてね！
                         <div class="absolute -bottom-2 right-2 w-0 h-0 border-t-8 border-t-white border-x-8 border-x-transparent"></div>
                     </div>
@@ -451,7 +435,7 @@
                             <button onclick="startQuiz()" class="bg-gradient-to-r from-brand-accent to-brand-primary hover:from-brand-primary hover:to-brand-accent text-white font-bold py-4 px-10 rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(139,92,246,0.4)] hover:shadow-[0_0_25px_rgba(139,92,246,0.6)] hover:-translate-y-1 group relative z-10 mx-auto flex items-center justify-center w-fit min-w-[200px] mb-6">
                                 簡易診断スタート <i class="ph-bold ph-arrow-right ml-2 inline-block group-hover:translate-x-1 transition-transform"></i>
                             </button>
-                            <a href="[https://aligner-diagnosis-public.vercel.app](https://aligner-diagnosis-public.vercel.app)" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 text-sm text-brand-cyan hover:text-white transition-colors underline font-bold relative z-10">
+                            <a href="https://aligner-diagnosis-public.vercel.app" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 text-sm text-brand-cyan hover:text-white transition-colors underline font-bold relative z-10">
                                 <i class="ph-bold ph-arrow-square-out text-lg"></i> より詳しく診断したい方はこちら（専用サイトへ）
                             </a>
                         </div>
@@ -461,7 +445,6 @@
         </div>
     </section>
 
-    <!-- Instructor Section -->
     <section id="instructor" class="py-24 bg-brand-surface border-y border-white/5">
         <div class="max-w-4xl mx-auto px-4 reveal">
             <div class="glass-panel rounded-3xl overflow-hidden flex flex-col md:flex-row">
@@ -490,7 +473,7 @@
                         </li>
                         <li class="flex items-start">
                             <i class="ph-fill ph-check-circle text-brand-primary mt-0.5 mr-3 text-lg shrink-0"></i>
-                            <span class="leading-relaxed">自ら各社のシステムを設計・装着検証したリアルな経験をもとに、客観的な指導を行う.</span>
+                            <span class="leading-relaxed">自ら各社のシステムを設計・装着検証したリアルな経験をもとに、客観的な指導を行う。</span>
                         </li>
                     </ul>
                 </div>
@@ -498,7 +481,6 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
     <section id="contact" class="py-32 relative bg-brand-dark overflow-hidden">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
 
@@ -538,15 +520,14 @@
                             </div>
                         </div>
 
-                        <a href="[https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform](https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform)" target="_blank" rel="noopener noreferrer" class="inline-block bg-white text-brand-dark font-bold px-12 py-5 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 transition duration-300 relative z-10">
+                        <a href="https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform" target="_blank" rel="noopener noreferrer" class="inline-block bg-white text-brand-dark font-bold px-12 py-5 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 transition duration-300 relative z-10">
                             コミュニティに参加する
                         </a>
                     </div>
                     
-                    <!-- 既存会員向けのポータルログインへの導線 -->
                     <div class="pt-8 border-t border-white/10 max-w-sm mx-auto relative z-10">
                         <p class="text-xs text-gray-500 mb-3">すでにMakeALine+にご参加の先生はこちら</p>
-                        <a href="[https://mal-portal-cyan.vercel.app](https://mal-portal-cyan.vercel.app)" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 text-sm text-brand-cyan hover:text-white transition-colors font-bold group">
+                        <a href="https://mal-portal-cyan.vercel.app" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 text-sm text-brand-cyan hover:text-white transition-colors font-bold group">
                             <span class="w-8 h-8 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 flex items-center justify-center group-hover:bg-brand-cyan group-hover:text-brand-dark transition-all">
                                 <i class="ph-bold ph-sign-in"></i>
                             </span>
@@ -563,7 +544,6 @@
         <p>&copy; 2026 MakeALine+. ALL RIGHTS RESERVED.</p>
     </footer>
 
-    <!-- ★ モーダル（ポップアップ）用のHTMLを追加 -->
     <div id="news-modal" class="fixed inset-0 z-[100] hidden opacity-0 scale-95 transition-all duration-300 flex items-center justify-center px-4">
         <div class="absolute inset-0 bg-brand-dark/90 backdrop-blur-sm" onclick="closeModal()"></div>
         <div class="relative w-full max-w-2xl bg-brand-surface border border-brand-cyan/30 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
@@ -939,10 +919,10 @@
                     <p class="text-sm text-gray-300 mb-10 max-w-lg mx-auto leading-relaxed bg-black/20 p-6 rounded-2xl border border-white/5 text-left">${resultText}</p>
                     
                     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
-                        <a href="[https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform](https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform)" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-brand-primary to-brand-accent text-white font-bold py-4 px-10 rounded-full hover:shadow-[0_0_25px_rgba(139,92,246,0.5)] hover:-translate-y-1 transition duration-300 w-full sm:w-auto">
+                        <a href="https://docs.google.com/forms/d/1yR4bB8MtXsr8XC0Z0c6szK8WNCl4kLvO7BGpfQsmVXA/viewform" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-brand-primary to-brand-accent text-white font-bold py-4 px-10 rounded-full hover:shadow-[0_0_25px_rgba(139,92,246,0.5)] hover:-translate-y-1 transition duration-300 w-full sm:w-auto">
                             コミュニティで学び始める
                         </a>
-                        <a href="[https://aligner-diagnosis-public.vercel.app](https://aligner-diagnosis-public.vercel.app)" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-brand-cyan hover:text-white transition underline w-full sm:w-auto flex items-center justify-center gap-1">
+                        <a href="https://aligner-diagnosis-public.vercel.app" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-brand-cyan hover:text-white transition underline w-full sm:w-auto flex items-center justify-center gap-1">
                             <i class="ph-bold ph-arrow-square-out text-lg"></i> より詳しい専用診断サイトへ
                         </a>
                     </div>
